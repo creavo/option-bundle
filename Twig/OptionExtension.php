@@ -3,11 +3,16 @@
 namespace Creavo\OptionBundle\Twig;
 
 
+use Creavo\OptionBundle\Provider\Settings;
+
 class OptionExtension extends \Twig_Extension
 {
 
-    public function __construct() {
+    /** @var Settings */
+    protected $settings;
 
+    public function __construct(Settings $settings) {
+        $this->settings=$settings;
     }
 
     public function getFunctions() {
@@ -17,7 +22,7 @@ class OptionExtension extends \Twig_Extension
     }
 
     public function getSetting($value) {
-
+        return $this->settings->get($value);
     }
 
 }

@@ -27,6 +27,7 @@ class Settings {
 
     public function get($name) {
 
+        return $name;
     }
 
     public function getAll() {
@@ -43,9 +44,36 @@ class Settings {
 
     protected function transformValueToDatabase($value,$type) {
 
+        if($type==SettingInterface::TYPE_DATE_TIME) {
+            return $value->format('Y-m-d H:i:s');
+        }
+
+        if($type==SettingInterface::TYPE_ARRAY) {
+            return json_encode($value);
+        }
+
+        return $value;
     }
 
     protected function transformValueFromDatabase($value,$type) {
 
+        if($type==SettingInterface::TYPE_STRING) {
+            return (string)$value;
+        }
+
+        if($type==SettingInterface::TYPE_INTEGER) {
+            return (integer)$value;
+        }
+
+        if($type==SettingInterface::TYPE_DATE_TIME) {
+            $dt=\DateTime::createFromFormat('Y-m-d H:i:s',$value);
+            return $dt;
+        }
+
+        if($type==SettingInterface::TYPE_ARRAY) {
+            return json_decode($value,true);
+        }
+
+        return $value;
     }
 }

@@ -24,5 +24,8 @@ class CreavoOptionExtension extends Extension
 
         $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.xml');
+
+        $def=$container->getDefinition('creavo_option.settings');
+        $def->replaceArgument(1,$config['simple_cache_service']);
     }
 }
