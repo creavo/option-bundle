@@ -9,6 +9,7 @@
         <service id="creavo_option.settings" class="Creavo\OptionBundle\Provider\Settings">
             <argument id="doctrine" />
             <argument></argument>
+            <argument></argument>
         </service>
 
         <service id="creavo_option.twig.option_extension" class="Creavo\OptionBundle\Twig\OptionExtension">

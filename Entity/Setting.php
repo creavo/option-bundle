@@ -58,13 +58,33 @@ class Setting implements SettingInterface
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="updated_at", type="datetimetz")
+     * @ORM\Column(name="updated_at", type="datetime")
      */
     private $updatedAt;
 
 
     public function __construct() {
         $this->updatedAt=new \DateTime('now');
+    }
+
+    public static function getTypeName($type) {
+        if($type==self::TYPE_STRING) {
+            return 'string';
+        }
+        if($type==self::TYPE_INTEGER) {
+            return 'integer';
+        }
+        if($type==self::TYPE_BOOLEAN) {
+            return 'boolean';
+        }
+        if($type==self::TYPE_DATE_TIME) {
+            return 'dateTime';
+        }
+        if($type==self::TYPE_ARRAY) {
+            return 'array';
+        }
+
+        return 'unknown';
     }
 
     public function getId(){

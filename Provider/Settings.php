@@ -17,9 +17,14 @@ class Settings {
     /** @var ObjectManager */
     protected $em;
 
-    public function __construct(RegistryInterface $registry, AbstractCache $cache=null) {
+    protected $settings=[];
+
+    public function __construct(RegistryInterface $registry, AbstractCache $cache=null, $fetchAll=false) {
         $this->em=$registry->getManager();
         $this->setCache($cache!==null ? $cache : new ArrayCache());
+        if($fetchAll) {
+            $this->fetchAll();
+        }
     }
 
     public function setCache(AbstractCache $cache) {
@@ -28,11 +33,21 @@ class Settings {
 
     public function get($name) {
 
-        return $name;
+        if(isset($this->settings[$name])) {
+            return $this->transformValueFromDatabase($this->settings[$name]['value'],$this->settings[$name]['type']);
+        }
+
+        return null;
     }
 
     public function getAll() {
+        $data=[];
 
+        foreach($this->settings AS $name=>$value) {
+            $data[$name]=$this->get($name);
+        }
+
+        return $data;
     }
 
     public function getSection($section) {
@@ -43,7 +58,20 @@ class Settings {
 
     }
 
+    public function fetchAll() {
+
+    }
+
+    public function fetch($name) {
+
+    }
+
     protected function transformValueToDatabase($value,$type) {
+
+        if($type==SettingInterface::TYPE_BOOLEAN) {
+            Assert::boolean($value);
+            return $value ? 1 : 0;
+        }
 
         if($type==SettingInterface::TYPE_DATE_TIME) {
             if(!$value instanceof \DateTimeInterface) {
@@ -68,6 +96,14 @@ class Settings {
 
         if($type==SettingInterface::TYPE_INTEGER) {
             return (integer)$value;
+        }
+
+        if($type==SettingInterface::TYPE_BOOLEAN) {
+            if(in_array($value,[true,1,'y','yes','true'])) {
+                return true;
+            }elseif(in_array($value,[false,0,'n','no','false'])) {
+                return false;
+            }
         }
 
         if($type==SettingInterface::TYPE_DATE_TIME) {

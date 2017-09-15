@@ -22,6 +22,7 @@ class Configuration implements ConfigurationInterface
 
         $rootNode
             ->children()
+            ->booleanNode('fetch_all')->defaultFalse()->end()
             ->scalarNode('simple_cache_service')->defaultNull()->end()
             ->end()
         ;
