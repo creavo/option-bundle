@@ -1,0 +1,32 @@
+{
+  "name": "creavo/option-bundle",
+  "description": "A bundle to manage options",
+  "type": "symfony-bundle",
+  "authors": [
+    {
+      "name": "Christoph Keßeler",
+      "email": "ck@creavo.de"
+    }
+  ],
+  "keywords": [
+    "tasks notify symfony bundle"
+  ],
+  "license": [
+    "MIT"
+  ],
+  "require": {
+    "php": ">5.5.9",
+    "doctrine/doctrine-bundle": "^1.6",
+    "symfony/framework-bundle": "^3.2"
+  },
+  "autoload": {
+    "psr-4": {
+      "Creavo\\OptionBundle\\": ""
+    }
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-master": "some_version-dev"
+    }
+  }
+}
