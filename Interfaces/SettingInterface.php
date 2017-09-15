@@ -10,18 +10,18 @@ interface SettingInterface
     const TYPE_DATE_TIME=3;
     const TYPE_ARRAY=4;
 
-    function setName($name);
-    function getName();
+    public function setName($name);
+    public function getName();
 
-    function setValue($value);
-    function getValue();
+    public function setValue($value);
+    public function getValue();
 
-    function setSection($value);
-    function getSection();
+    public function setSection($value);
+    public function getSection();
 
-    function setType($type);
-    function getType();
+    public function setType($type);
+    public function getType();
 
-    function setUpdatedAt($updatedAt);
-    function getUpdatedAt();
+    public function setUpdatedAt($updatedAt);
+    public function getUpdatedAt();
 }
