@@ -91,6 +91,16 @@ class Setting implements SettingInterface
         return $this->id;
     }
 
+    public function toArray() {
+        return [
+            'name'=>$this->getName(),
+            'section'=>$this->getSection(),
+            'value'=>$this->getValue(),
+            'type'=>$this->getType(),
+            'updatedAt'=>$this->getUpdatedAt(),
+        ];
+    }
+
     public function setName($name){
         $this->name = $name;
         return $this;

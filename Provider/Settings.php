@@ -2,12 +2,14 @@
 
 namespace Creavo\OptionBundle\Provider;
 
+use Creavo\OptionBundle\Entity\Setting;
 use Creavo\OptionBundle\Interfaces\SettingInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\Cache\Simple\AbstractCache;
 use Symfony\Component\Cache\Simple\ArrayCache;
 use Webmozart\Assert\Assert;
+use Psr\SimpleCache\CacheInterface;
 
 class Settings {
 
@@ -19,7 +21,7 @@ class Settings {
 
     protected $settings=[];
 
-    public function __construct(RegistryInterface $registry, AbstractCache $cache=null, $fetchAll=false) {
+    public function __construct(RegistryInterface $registry, CacheInterface $cache=null, $fetchAll=false) {
         $this->em=$registry->getManager();
         $this->setCache($cache!==null ? $cache : new ArrayCache());
         if($fetchAll) {
@@ -27,7 +29,7 @@ class Settings {
         }
     }
 
-    public function setCache(AbstractCache $cache) {
+    public function setCache(CacheInterface $cache) {
         $this->cache=$cache;
     }
 
@@ -35,6 +37,36 @@ class Settings {
 
         if(isset($this->settings[$name])) {
             return $this->transformValueFromDatabase($this->settings[$name]['value'],$this->settings[$name]['type']);
+        }
+
+        /** @var Setting $setting */
+        if($setting=$this->em->getRepository('CreavoOptionBundle:Setting')->findByName($name)) {
+            return $this->transformValueFromDatabase($setting->getValue(),$setting->getType());
+        }
+
+        return null;
+    }
+
+    public function getUnCached($name) {
+
+        /** @var Setting $setting */
+        if($setting=$this->em->getRepository('CreavoOptionBundle:Setting')->findByName($name)) {
+            return $this->transformValueFromDatabase($setting->getValue(),$setting->getType());
+        }
+
+        return null;
+    }
+
+    public function getFull($name) {
+
+        if(isset($this->settings[$name])) {
+            return $this->settings[$name];
+        }
+
+        /** @var Setting $setting */
+        if($setting=$this->em->getRepository('CreavoOptionBundle:Setting')->findByName($name)) {
+            $this->settings[$name]=$setting->toArray();
+            return $setting->toArray();
         }
 
         return null;
@@ -54,8 +86,21 @@ class Settings {
 
     }
 
-    public function set($name, $value, $type=SettingInterface::TYPE_STRING) {
+    public function set($name, $value, $type=SettingInterface::TYPE_STRING, $section=null) {
 
+        if(!$setting=$this->em->getRepository('CreavoOptionBundle:Setting')->findByName($name)) {
+            $setting=new Setting();
+            $setting->setName($name);
+        }
+
+        $setting->setValue($this->transformValueToDatabase($value,$type));
+        $setting->setSection($section);
+        $setting->setType($type);
+        $setting->setUpdatedAt(new \DateTime('now'));
+        $this->em->persist($setting);
+        $this->em->flush();
+
+        $this->settings[$name]=$setting->toArray();
     }
 
     public function fetchAll() {

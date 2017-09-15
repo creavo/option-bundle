@@ -24,7 +24,7 @@ class CrvObGetCommand extends ContainerAwareCommand
     {
         $name = $input->getArgument('name');
 
-        $data=$this->getContainer()->get('creavo_option.settings')->get($name);
+        $data=$this->getContainer()->get('creavo_option.settings')->getFull($name);
 
         if($data===null) {
             $output->writeln('setting "'.$name.'" is not set');
