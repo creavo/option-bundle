@@ -86,7 +86,11 @@ class Settings {
 
     }
 
-    public function set($name, $value, $type=SettingInterface::TYPE_STRING, $section=null) {
+    public function set($name, $value, $type=null, $section=null) {
+
+        if(!$type) {
+            $type=SettingInterface::TYPE_STRING;
+        }
 
         if(!$setting=$this->em->getRepository('CreavoOptionBundle:Setting')->findByName($name)) {
             $setting=new Setting();
