@@ -2,6 +2,7 @@
 
 namespace Creavo\OptionBundle\Command;
 
+use Creavo\OptionBundle\Entity\Setting;
 use Creavo\OptionBundle\Interfaces\SettingInterface;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
@@ -33,6 +34,10 @@ class CrvObSetCommand extends ContainerAwareCommand
             $value=new \DateTime($value);
         }elseif($type==SettingInterface::TYPE_ARRAY) {
             $value=json_decode($value,true);
+        }
+
+        if(Setting::getIdByTypeName($type)) {
+            $type=Setting::getIdByTypeName($type);
         }
 
         $this->getContainer()->get('creavo_option.settings')->set($name,$value,$type,$section);

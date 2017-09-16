@@ -87,6 +87,26 @@ class Setting implements SettingInterface
         return 'unknown';
     }
 
+    public static function getIdByTypeName($type) {
+        if($type=='string') {
+            return self::TYPE_STRING;
+        }
+        if($type=='integer') {
+            return self::TYPE_INTEGER;
+        }
+        if($type=='boolean') {
+            return self::TYPE_BOOLEAN;
+        }
+        if($type=='dateTime') {
+            return self::TYPE_DATE_TIME;
+        }
+        if($type=='array') {
+            return self::TYPE_ARRAY;
+        }
+
+        return null;
+    }
+
     public function getId(){
         return $this->id;
     }
