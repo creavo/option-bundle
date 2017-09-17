@@ -6,6 +6,8 @@
 
 
     <services>
+        <service id="crv.option" alias="creavo_option.settings"/>
+
         <service id="creavo_option.settings" class="Creavo\OptionBundle\Provider\Settings">
             <argument type="service" id="doctrine" />
             <argument></argument>
@@ -14,7 +16,7 @@
 
         <service id="creavo_option.twig.option_extension" class="Creavo\OptionBundle\Twig\OptionExtension">
             <tag name="twig.extension" />
-            <argument id="creavo_option.settings" />
+            <argument type="service" id="creavo_option.settings" />
         </service>
     </services>
 

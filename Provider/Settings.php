@@ -19,8 +19,15 @@ class Settings {
     /** @var ObjectManager */
     protected $em;
 
+    /** @var array */
     protected $settings=[];
 
+    /**
+     * Settings constructor.
+     * @param RegistryInterface $registry
+     * @param CacheInterface|null $cache
+     * @param bool $fetchAll
+     */
     public function __construct(RegistryInterface $registry, CacheInterface $cache=null, $fetchAll=false) {
         $this->em=$registry->getManager();
         $this->setCache($cache!==null ? $cache : new ArrayCache());
@@ -29,10 +36,19 @@ class Settings {
         }
     }
 
+    /**
+     * @param CacheInterface $cache
+     */
     public function setCache(CacheInterface $cache) {
         $this->cache=$cache;
     }
 
+    /**
+     * returns option with caching
+     *
+     * @param $name
+     * @return bool|\DateTime|mixed|null
+     */
     public function get($name) {
 
         if(isset($this->settings[$name])) {
@@ -41,22 +57,57 @@ class Settings {
 
         /** @var Setting $setting */
         if($setting=$this->em->getRepository('CreavoOptionBundle:Setting')->findByName($name)) {
+            $this->addToCache($setting);
             return $this->transformValueFromDatabase($setting->getValue(),$setting->getType());
         }
 
         return null;
     }
 
+    /**
+     * checks if option is existing
+     *
+     * @param $name
+     * @return bool
+     */
+    public function has($name) {
+
+        if(isset($this->settings[$name])) {
+            return true;
+        }
+
+        /** @var Setting $setting */
+        if($setting=$this->em->getRepository('CreavoOptionBundle:Setting')->findByName($name)) {
+            $this->addToCache($setting);
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * returns option without any caching (directly from database)
+     *
+     * @param $name
+     * @return bool|\DateTime|mixed|null
+     */
     public function getUnCached($name) {
 
         /** @var Setting $setting */
         if($setting=$this->em->getRepository('CreavoOptionBundle:Setting')->findByName($name)) {
+            $this->addToCache($setting);
             return $this->transformValueFromDatabase($setting->getValue(),$setting->getType());
         }
 
         return null;
     }
 
+    /**
+     * returns array with additional data to the option like type, section and last updated
+     *
+     * @param $name
+     * @return array|mixed|null
+     */
     public function getFull($name) {
 
         if(isset($this->settings[$name])) {
@@ -72,6 +123,11 @@ class Settings {
         return null;
     }
 
+    /**
+     * returns array with all options
+     *
+     * @return array
+     */
     public function getAll() {
         $data=[];
 
@@ -82,10 +138,28 @@ class Settings {
         return $data;
     }
 
+    public function getAllFull() {
+        $data=[];
+
+        foreach($this->settings AS $name=>$value) {
+            $data[$name]=$this->getFull($name);
+        }
+
+        return $data;
+    }
+
     public function getSection($section) {
 
     }
 
+    /**
+     * sets an option
+     *
+     * @param $name
+     * @param $value
+     * @param null $type
+     * @param null $section
+     */
     public function set($name, $value, $type=null, $section=null) {
 
         if(!$type) {
@@ -107,14 +181,36 @@ class Settings {
         $this->settings[$name]=$setting->toArray();
     }
 
+    /**
+     * fetches all options to cache
+     */
     public function fetchAll() {
 
+        $settings=$this->em->getRepository('CreavoOptionBundle:Setting')->findAll();
+
+        /** @var Setting $setting */
+        foreach($settings AS $setting) {
+            $this->addToCache($setting);
+        }
     }
 
-    public function fetch($name) {
-
+    /**
+     * adds a setting to the cache
+     *
+     * @param Setting $setting
+     */
+    protected function addToCache(Setting $setting) {
+        $this->settings[$setting->getName()]=$setting->toArray();
     }
 
+    /**
+     * transforms value to string-representation for the database (e.g. array to json)
+     *
+     * @param $value
+     * @param $type
+     * @return int|string
+     * @throws \Exception
+     */
     protected function transformValueToDatabase($value,$type) {
 
         if($type==SettingInterface::TYPE_BOOLEAN) {
@@ -137,6 +233,13 @@ class Settings {
         return $value;
     }
 
+    /**
+     * transforms string-representation from database to php-objects (e.g. json to array)
+     *
+     * @param $value
+     * @param $type
+     * @return bool|\DateTime|int|mixed|string
+     */
     protected function transformValueFromDatabase($value,$type) {
 
         if($type==SettingInterface::TYPE_STRING) {
