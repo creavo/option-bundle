@@ -8,6 +8,8 @@ class DefaultController extends Controller
 {
     public function indexAction()
     {
+
+
         return $this->render('CreavoOptionBundle:Default:index.html.twig');
     }
 }

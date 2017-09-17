@@ -138,6 +138,11 @@ class Settings {
         return $data;
     }
 
+    /**
+     * returns array with all options and additional data
+     *
+     * @return array
+     */
     public function getAllFull() {
         $data=[];
 
@@ -148,8 +153,40 @@ class Settings {
         return $data;
     }
 
+    /**
+     * returns array with all values from a given section
+     *
+     * @param $section
+     * @return array
+     */
     public function getSection($section) {
+        $data=[];
 
+        foreach($this->settings AS $name=>$settingData) {
+            if($section===$settingData['section']) {
+                $data[$name]=$this->get($name);
+            }
+        }
+
+        return $data;
+    }
+
+    /**
+     * returns array with all values with additional data from a given section
+     *
+     * @param $section
+     * @return array
+     */
+    public function getSectionFull($section) {
+        $data=[];
+
+        foreach($this->settings AS $name=>$settingData) {
+            if($section===$settingData['section']) {
+                $data[$name]=$this->getFull($name);
+            }
+        }
+
+        return $data;
     }
 
     /**
@@ -178,7 +215,7 @@ class Settings {
         $this->em->persist($setting);
         $this->em->flush();
 
-        $this->settings[$name]=$setting->toArray();
+        $this->addToCache($setting);
     }
 
     /**

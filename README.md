@@ -10,7 +10,20 @@ please use composer with
     
 Add the bundle to your `app/AppKernel.php` with 
 
-    new Creavo\OptionBundle\CreavoOptionBundle(),
+    class AppKernel extends Kernel
+    {
+        public function registerBundles()
+        {
+            $bundles = [
+                [...],
+                new Creavo\OptionBundle\CreavoOptionBundle(),
+            ];
+            
+            return $bundles;
+        }
+        
+        [...]
+    }
 
 Update the doctrine-schema - use 
 
@@ -48,10 +61,20 @@ get a setting (uncached - will fetch value freshly from database without the cac
 
     $optionValue=$container->get('crv.option')->getUnCached('option-name'); 
 
+### in twig
+
+to get a value in twig use
+    
+    {{ crv_ob_setting('option-name') }}
+
 ### use console-commands
 set a setting with `php bin/console crv:ob:set name value [type] [section]` type and section are optional - if you omit them, the type will be a string and section `null`.
 
     $ php bin/console crv:ob:set test1 "2017-09-16 12:00:00" dateTime parameters
+
+setting the hash of the last-commit
+
+    php bin/console crv:ob:set app_version `git rev-parse --short HEAD`
 
 to get a setting use get:
 
