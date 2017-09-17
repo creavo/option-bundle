@@ -47,9 +47,10 @@ class Settings {
      * returns option with caching
      *
      * @param $name
-     * @return bool|\DateTime|mixed|null
+     * @param null $default
+     * @return bool|\DateTime|int|mixed|null|string
      */
-    public function get($name) {
+    public function get($name, $default=null) {
 
         if(isset($this->settings[$name])) {
             return $this->transformValueFromDatabase($this->settings[$name]['value'],$this->settings[$name]['type']);
@@ -61,7 +62,7 @@ class Settings {
             return $this->transformValueFromDatabase($setting->getValue(),$setting->getType());
         }
 
-        return null;
+        return $default;
     }
 
     /**
@@ -89,9 +90,10 @@ class Settings {
      * returns option without any caching (directly from database)
      *
      * @param $name
+     * @param null $default
      * @return bool|\DateTime|mixed|null
      */
-    public function getUnCached($name) {
+    public function getUnCached($name, $default=null) {
 
         /** @var Setting $setting */
         if($setting=$this->em->getRepository('CreavoOptionBundle:Setting')->findByName($name)) {
@@ -99,7 +101,7 @@ class Settings {
             return $this->transformValueFromDatabase($setting->getValue(),$setting->getType());
         }
 
-        return null;
+        return $default;
     }
 
     /**
