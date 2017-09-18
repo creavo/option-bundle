@@ -4,6 +4,7 @@ namespace Creavo\OptionBundle\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
+use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\Loader;
 
@@ -26,7 +27,9 @@ class CreavoOptionExtension extends Extension
         $loader->load('services.xml');
 
         $def=$container->getDefinition('creavo_option.settings');
-        $def->replaceArgument(1,$config['simple_cache_service']);
+        if($config['simple_cache_service']) {
+            $def->replaceArgument(1,new Reference($config['simple_cache_service']));
+        }
         $def->replaceArgument(2,$config['fetch_all']);
     }
 }
