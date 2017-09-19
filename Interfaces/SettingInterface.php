@@ -26,5 +26,5 @@ interface SettingInterface
     public function setUpdatedAt($updatedAt);
     public function getUpdatedAt();
 
-    public static function getTypeName($type);
+    public static function getTypeByName($type);
 }

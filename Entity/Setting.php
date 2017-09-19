@@ -67,7 +67,7 @@ class Setting implements SettingInterface
         $this->updatedAt=new \DateTime('now');
     }
 
-    public static function getTypeName($type) {
+    public static function getTypeByName($type) {
         if($type==self::TYPE_STRING) {
             return 'string';
         }
@@ -155,6 +155,10 @@ class Setting implements SettingInterface
 
     public function getType(){
         return $this->type;
+    }
+
+    public function getTypeName() {
+        return self::getTypeByName($this->getType());
     }
 
     public function setUpdatedAt($updatedAt){

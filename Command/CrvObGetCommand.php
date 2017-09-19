@@ -36,7 +36,7 @@ class CrvObGetCommand extends ContainerAwareCommand
             ->setHeaders(['Element','Value'])
             ->setRows([
                 ['name',$data['name']],
-                ['type',Setting::getTypeName($data['type'])],
+                ['type',Setting::getTypeByName($data['type'])],
                 ['section',$data['section']],
                 ['updatedAt',$data['updatedAt']->format('Y-m-d H:i:s')],
                 ['value',$data['value']],
