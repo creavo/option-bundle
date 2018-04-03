@@ -2,7 +2,6 @@
 
 namespace Creavo\OptionBundle\Twig;
 
-
 use Creavo\OptionBundle\Provider\Settings;
 
 class OptionExtension extends \Twig_Extension
