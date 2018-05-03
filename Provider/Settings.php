@@ -7,13 +7,12 @@ use Creavo\OptionBundle\Interfaces\SettingInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\Cache\Simple\AbstractCache;
-use Symfony\Component\Cache\Simple\ArrayCache;
 use Webmozart\Assert\Assert;
 use Psr\SimpleCache\CacheInterface;
 
 class Settings {
 
-    /** @var AbstractCache */
+    /** @var AbstractCache|null */
     protected $cache;
 
     /** @var ObjectManager */
@@ -30,7 +29,9 @@ class Settings {
      */
     public function __construct(RegistryInterface $registry, CacheInterface $cache=null, $fetchAll=false) {
         $this->em=$registry->getManager();
-        $this->setCache($cache!==null ? $cache : new ArrayCache());
+        if($cache) {
+            $this->setCache($cache);
+        }
         if($fetchAll) {
             $this->fetchAll();
         }
@@ -198,6 +199,7 @@ class Settings {
      * @param $value
      * @param null $type
      * @param null $section
+     * @throws \Exception
      */
     public function set($name, $value, $type=null, $section=null) {
 
@@ -292,14 +294,14 @@ class Settings {
         if($type==SettingInterface::TYPE_BOOLEAN) {
             if(in_array($value,[true,1,'y','yes','true'])) {
                 return true;
-            }elseif(in_array($value,[false,0,'n','no','false'])) {
+            }
+            if(in_array($value,[false,0,'n','no','false'])) {
                 return false;
             }
         }
 
         if($type==SettingInterface::TYPE_DATE_TIME) {
-            $dt=\DateTime::createFromFormat('Y-m-d H:i:s',$value);
-            return $dt;
+            return \DateTime::createFromFormat('Y-m-d H:i:s',$value);
         }
 
         if($type==SettingInterface::TYPE_ARRAY) {

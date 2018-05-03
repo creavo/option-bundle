@@ -29,6 +29,8 @@ class CreavoOptionExtension extends Extension
         $def=$container->getDefinition('creavo_option.settings');
         if($config['simple_cache_service']) {
             $def->replaceArgument(1,new Reference($config['simple_cache_service']));
+        }else{
+            $def->replaceArgument(1,null);
         }
         $def->replaceArgument(2,$config['fetch_all']);
     }
