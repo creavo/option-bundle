@@ -23,5 +23,9 @@ class OptionExtension extends \Twig_Extension
     public function getSetting($value) {
         return $this->settings->get($value);
     }
+    
+    public function getName() {
+        return 'crv_ob_twig';
+    }
 
 }
