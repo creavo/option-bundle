@@ -197,13 +197,13 @@ class Settings {
      *
      * @param $name
      * @param $value
-     * @param null $type
-     * @param null $section
+     * @param string $type
+     * @param string $section
      * @throws \Exception
      */
     public function set($name, $value, $type=null, $section=null) {
 
-        if(!$type) {
+        if($type===null) {
             $type=SettingInterface::TYPE_STRING;
         }
 
