@@ -16,7 +16,7 @@
             <tag name="console.command" />
         </service>
 
-        <service id="creavo_option.settings" class="Creavo\OptionBundle\Provider\Settings">
+        <service id="creavo_option.settings" class="Creavo\OptionBundle\Provider\Settings" public="true">
             <argument type="service" id="doctrine" />
             <argument></argument>
             <argument></argument>
