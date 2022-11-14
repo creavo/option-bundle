@@ -7,6 +7,14 @@
 
     <services>
         <service id="crv.option" alias="creavo_option.settings"/>
+        
+        <service id="crv_option.command.get" class="Creavo\OptionBundle\Command\CrvObGetCommand">
+            <tag name="console.command" />
+        </service>
+
+        <service id="crv_option.command.set" class="Creavo\OptionBundle\Command\CrvObSetCommand">
+            <tag name="console.command" />
+        </service>
 
         <service id="creavo_option.settings" class="Creavo\OptionBundle\Provider\Settings">
             <argument type="service" id="doctrine" />
