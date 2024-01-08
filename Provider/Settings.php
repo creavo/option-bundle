@@ -5,7 +5,7 @@ namespace Creavo\OptionBundle\Provider;
 use Creavo\OptionBundle\Entity\Setting;
 use Creavo\OptionBundle\Interfaces\SettingInterface;
 use Doctrine\Common\Persistence\ObjectManager;
-use Symfony\Bridge\Doctrine\RegistryInterface;
+use Symfony\ORM\EntityManagerInterface;
 use Symfony\Component\Cache\Simple\AbstractCache;
 use Webmozart\Assert\Assert;
 use Psr\SimpleCache\CacheInterface;
@@ -15,7 +15,7 @@ class Settings {
     /** @var AbstractCache|null */
     protected $cache;
 
-    /** @var ObjectManager */
+    /** @var EntityManagerInterface */
     protected $em;
 
     /** @var array */
@@ -27,8 +27,8 @@ class Settings {
      * @param CacheInterface|null $cache
      * @param bool $fetchAll
      */
-    public function __construct(RegistryInterface $registry, CacheInterface $cache=null, $fetchAll=false) {
-        $this->em=$registry->getManager();
+    public function __construct(EntityManagerInterface $em, CacheInterface $cache=null, $fetchAll=false) {
+        $this->em=$em;
         if($cache) {
             $this->setCache($cache);
         }
