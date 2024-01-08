@@ -14,7 +14,7 @@
             <argument></argument>
         </service>
 
-        <service id="Creavo\OptionBundle\Provider\Settings" alias="creavo_option.settings">
+        <service id="Creavo\OptionBundle\Provider\Settings" alias="creavo_option.settings" />
 
         <service id="creavo_option.twig.option_extension" class="Creavo\OptionBundle\Twig\OptionExtension">
             <tag name="twig.extension" />
