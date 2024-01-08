@@ -57,7 +57,7 @@ class Settings {
         }
 
         /** @var Setting $setting */
-        if($setting=$this->em->getRepository('CreavoOptionBundle:Setting')->findByName($name)) {
+        if($setting=$this->em->getRepository(Setting::class)->findByName($name)) {
             $this->addToCache($setting);
             return $this->transformValueFromDatabase($setting->getValue(),$setting->getType());
         }
@@ -78,7 +78,7 @@ class Settings {
         }
 
         /** @var Setting $setting */
-        if($setting=$this->em->getRepository('CreavoOptionBundle:Setting')->findByName($name)) {
+        if($setting=$this->em->getRepository(Setting::class)->findByName($name)) {
             $this->addToCache($setting);
             return true;
         }
@@ -96,7 +96,7 @@ class Settings {
     public function getUnCached($name, $default=null) {
 
         /** @var Setting $setting */
-        if($setting=$this->em->getRepository('CreavoOptionBundle:Setting')->findByName($name)) {
+        if($setting=$this->em->getRepository(Setting::class)->findByName($name)) {
             $this->addToCache($setting);
             return $this->transformValueFromDatabase($setting->getValue(),$setting->getType());
         }
@@ -117,7 +117,7 @@ class Settings {
         }
 
         /** @var Setting $setting */
-        if($setting=$this->em->getRepository('CreavoOptionBundle:Setting')->findByName($name)) {
+        if($setting=$this->em->getRepository(Setting::class)->findByName($name)) {
             $this->settings[$name]=$setting->toArray();
             return $setting->toArray();
         }
@@ -206,7 +206,7 @@ class Settings {
             $type=SettingInterface::TYPE_STRING;
         }
 
-        if(!$setting=$this->em->getRepository('CreavoOptionBundle:Setting')->findByName($name)) {
+        if(!$setting=$this->em->getRepository(Setting::class)->findByName($name)) {
             $setting=new Setting();
             $setting->setName($name);
         }
@@ -226,7 +226,7 @@ class Settings {
      */
     public function fetchAll() {
 
-        $settings=$this->em->getRepository('CreavoOptionBundle:Setting')->findAll();
+        $settings=$this->em->getRepository(Setting::class)->findAll();
 
         /** @var Setting $setting */
         foreach($settings AS $setting) {
