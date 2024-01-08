@@ -4,8 +4,7 @@ namespace Creavo\OptionBundle\Provider;
 
 use Creavo\OptionBundle\Entity\Setting;
 use Creavo\OptionBundle\Interfaces\SettingInterface;
-use Doctrine\Common\Persistence\ObjectManager;
-use Symfony\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Cache\Simple\AbstractCache;
 use Webmozart\Assert\Assert;
 use Psr\SimpleCache\CacheInterface;
