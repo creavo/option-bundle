@@ -9,7 +9,7 @@
         <service id="crv.option" alias="creavo_option.settings"/>
         
         <service id="creavo_option.settings" class="Creavo\OptionBundle\Provider\Settings" public="true">
-            <argument type="service" id="doctrine" />
+            <argument type="service" id="doctrine.orm.entity_manager" />
             <argument></argument>
             <argument></argument>
         </service>
